@@ -8,9 +8,9 @@ module.exports = () => {
     res.send("Bienvenido");
   });
 
-  router.get("/obtener_usuarios", auth, userController.obtenerUsuarios);
-  router.post("/crear_usuarios", auth, userController.crearUsuarios);
-  router.post("/iniciar_sesion", userController.autenticarUsuario);
+  router.get("/usuarios", auth, userController.obtenerUsuarios);
+  router.post("/usuarios", auth, userController.crearUsuarios);
+  router.post("/login", userController.autenticarUsuario);
   router.delete("/eliminar_usuario:id", auth, userController.eliminarUsuarios);
   return router;
 };

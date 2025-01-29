@@ -6,6 +6,7 @@ const {
 } = require("../modules/usuarios");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const obtenerUsuarios = async (req, res) => {
   try {
     const usuarios = await obtenerTodos();
@@ -44,7 +45,11 @@ const autenticarUsuario = async (req, res) => {
           },
           process.env.JWT_KEY
         );
-        res.status(200).json(token);
+        return res.status(200).json({
+          message: "Usuario idenificado con éxito",
+          token,
+          usuario: { id: usuario.id, email: usuario.email },
+        });
       }
     }
   } catch (error) {

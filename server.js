@@ -8,4 +8,4 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extendd: true }));
 app.use("/", routes());
-app.listen(port, () => console.log(`example app listening on port ${port}!`));
+app.listen(port, () => console.log(`SERVIDOR ENCENDIDO EN PUERTO ${port}!`));
