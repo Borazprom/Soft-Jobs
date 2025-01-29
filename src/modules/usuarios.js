@@ -21,4 +21,25 @@ const crearUsuario = async (email, password, rol, lenguaje) => {
   }
 };
 
-module.exports = { obtenerTodos, crearUsuario };
+const usuarioEmail = async (email) => {
+  try {
+    const SQLQuery = "SELECT * FROM usuarios WHERE email = $1";
+    const SQLValues = [email];
+    const result = await pool.query(SQLQuery, SQLValues);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("Error no registrado");
+  }
+};
+
+const eliminarUsuario = async (id) => {
+  try {
+    const SQLQuery = "DELETE * FROM usuarios WHERE id = $1";
+    const SQLValues = [id];
+    const result = await pool.query(SQLQuery, SQLValues);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("No se pudo eliminar el usuario");
+  }
+};
+module.exports = { obtenerTodos, crearUsuario, usuarioEmail, eliminarUsuario };

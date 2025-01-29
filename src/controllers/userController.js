@@ -1,5 +1,11 @@
-const { obtenerTodos, crearUsuario } = require("../modules/usuarios");
+const {
+  obtenerTodos,
+  crearUsuario,
+  usuarioEmail,
+  eliminarUsuario,
+} = require("../modules/usuarios");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const obtenerUsuarios = async (req, res) => {
   try {
     const usuarios = await obtenerTodos();
@@ -21,4 +27,43 @@ const crearUsuarios = async (req, res) => {
   }
 };
 
-module.exports = { obtenerUsuarios, crearUsuarios };
+const autenticarUsuario = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const usuario = await usuarioEmail(email);
+    if (!usuario) {
+      res.status(401).json({ message: "Usuario no registrado" });
+    } else {
+      if (!bcrypt.compareSync(password, usuario.password)) {
+        res.status(401).json({ message: "Contraseña invalida" });
+      } else {
+        const token = jwt.sing(
+          {
+            email: usuario.email,
+            id: usuario.id,
+          },
+          process.env.JWT_KEY
+        );
+        res.status(200).json(token);
+      }
+    }
+  } catch (error) {
+    res.status(500).send("Error de autenticación");
+  }
+};
+
+const eliminarUsuarios = async (re, res) => {
+  try {
+    await eliminarUsuario(req.params.id);
+    res.status(200).send("Usuario eliminado");
+  } catch (error) {
+    res.status(500).send("No se pudo eliminar");
+  }
+};
+
+module.exports = {
+  obtenerUsuarios,
+  crearUsuarios,
+  autenticarUsuario,
+  eliminarUsuarios,
+};
